@@ -5,6 +5,8 @@ import exceptions.*;;
 
 public class account{
     private int acc_No;
+    private int branchID;
+    private String branchName;
     private AccountType acctype;
     private String customerName;
     private int customerID;
@@ -17,8 +19,10 @@ public class account{
     // account(){
     //     this.setCreatedDate();
     // }
-    account(int acc_No, AccountType type, String customerName, int customerID,double amount, int PIN){
+    account(int acc_No, int branchID, String branchName, AccountType type, String customerName, int customerID,double amount, int PIN){
         this.acc_No = acc_No;
+        this.branchID = branchID;
+        this.branchName = branchName;
         this.acctype = type;
         this.customerName = customerName;
         this.customerID = customerID;
@@ -33,6 +37,10 @@ public class account{
         LocalDateTime dateTime = LocalDateTime.now();
         DateTimeFormatter formater = DateTimeFormatter.ofPattern("dd-MM-yyyy  HH:mm:ss");
         this.createdDate = dateTime.format(formater);
+    }
+
+    public void setAccStatus(Status status){
+        this.currentStatus = status;
     }
 
     public void setPIN(int oldPIN, int newPIN) throws InvalidPINException{
@@ -58,18 +66,21 @@ public class account{
     
 
     // method to make a withdrawal
-    public void withdrawMoney(double amount) throws InvalidAmountException{
-        if(this.amount < amount){
-            throw new InvalidAmountException("Your input exceeds the account balance amount. Please check the input.");
-        }
-        else{
+    public void withdrawMoney(double amount) throws InvalidAmountException, InactiveAccStatusException{
+        if(this.amount >= amount && this.currentStatus == Status.Active){
             this.amount -= amount;
             System.out.println("Withdrawal sucessfully completed.");
+        }
+        else if(this.currentStatus != Status.Active){
+            throw new InactiveAccStatusException("Your account is inactive. Please contact the bank.");
+        }
+        else{
+            throw new InvalidAmountException("Insufficient balance to withdraw.");
         }
     }
 
     
-    // method to check the pin
+    // getter methods for this class
     public int getPIN(){
         return this.PIN;
     }
@@ -104,6 +115,14 @@ public class account{
     
     public Status getAccStatus(){
         return this.currentStatus;
+    }
+
+    public String getBranchName(){
+        return this.branchName;
+    }
+
+    public int getBranchID(){
+        return this.branchID;
     }
 }
 
