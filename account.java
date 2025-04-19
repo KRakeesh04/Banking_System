@@ -32,6 +32,20 @@ public class account{
         this.currentStatus = Status.Active ;
         this.setCreatedDate();
     }
+    account(int acc_No, int branchID, String branchName, AccountType type, String customerName, int customerID,double amount, int PIN, String createdDate, Status status){
+        this.acc_No = acc_No;
+        this.branchID = branchID;
+        this.branchName = branchName;
+        this.acctype = type;
+        this.customerName = customerName;
+        this.customerID = customerID;
+        this.amount = amount;
+        this.interestRate = this.acctype.getInterestRate();
+        this.PIN = PIN;
+        this.currentStatus = status;
+        this.createdDate = createdDate;
+    }
+    
 
     private void setCreatedDate(){
         LocalDateTime dateTime = LocalDateTime.now();
@@ -79,14 +93,47 @@ public class account{
         }
     }
 
+    // method to transfer money
+    public void transferMoney(account toAcc, double amount) throws InvalidAmountException, InactiveAccStatusException{
+        if(this.amount >= amount && this.currentStatus == Status.Active){
+            this.amount -= amount;
+            toAcc.depositMoney(amount);
+            System.out.println("Transfer sucessfully completed.");
+        }
+        else if(this.currentStatus != Status.Active){
+            throw new InactiveAccStatusException("Your account is inactive. Please contact the bank.");
+        }
+        else{
+            throw new InvalidAmountException("Insufficient balance to transfer.");
+        }
+    }
+
+
+    // method to get the balance
+    public double getBalance() throws InactiveAccStatusException{
+        if(this.currentStatus == Status.Active){
+            return this.amount;
+        }
+        else{
+            throw new InactiveAccStatusException("Your account is inactive. Please contact the bank.");
+        }
+    }
+
+    // method to calculate and add interest
+    public void calculateInterest() throws InactiveAccStatusException{
+        if(this.currentStatus == Status.Active){
+            // double interest = this.amount * this.interestRate;
+            // this.amount += interest;
+            //TODO: calculation for the interest 
+        }
+        else{
+            throw new InactiveAccStatusException("Your account is inactive. Please contact the bank.");
+        }
+    }
     
     // getter methods for this class
     public int getPIN(){
         return this.PIN;
-    }
-    
-    public double getAmount(){
-        return this.amount;
     }
 
     public double getInterestRate(){

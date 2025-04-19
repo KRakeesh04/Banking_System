@@ -9,10 +9,22 @@ public class Customer {
     private String phoneNo;
     private String dateOfBirth; // format  yyyy-mm-dd
     private String email = "none";
-    private ArrayList<account> accountDetails;
+    private ArrayList<account> accountsOfCustomer;
 
+    public Customer(int customerID, String Password, String customerName, String customerNIC, String address, String phoneNo, String dateOfBirth, String email, ArrayList<account> accountsOfCustomer){
+        this.customerID = customerID;
+        this.Password = Password;
+        this.customerName = customerName;
+        this.customerNIC = customerNIC;
+        this.address = address;
+        this.phoneNo = phoneNo;
+        this.dateOfBirth = dateOfBirth;
+        this.email = email;
+        this.accountsOfCustomer = accountsOfCustomer;
+    }
     public Customer(int customerID, String Password, String customerName, String customerNIC, String address, String phoneNo, String dateOfBirth, String email){
         this.customerID = customerID;
+        this.Password = Password;
         this.customerName = customerName;
         this.customerNIC = customerNIC;
         this.address = address;
@@ -22,6 +34,7 @@ public class Customer {
     }
     public Customer(int customerID, String Password, String customerName, String customerNIC, String address, String phoneNo, String dateOfBirth){
         this.customerID = customerID;
+        this.Password = Password;
         this.customerName = customerName;
         this.customerNIC = customerNIC;
         this.address = address;
@@ -66,7 +79,7 @@ public class Customer {
     }
 
     public void addAccountToCustomer(account a){
-        this.accountDetails.add(a);
+        this.accountsOfCustomer.add(a);
     }
 
 

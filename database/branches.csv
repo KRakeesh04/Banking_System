@@ -1,0 +1,13 @@
+branchID,branchName,contactNo,location,branchEmail,branchManegerName,branchManagerEmail,branchManagerPhoneNo
+10001,Main Branch,1234567890,New York,mainbranch@bank.com,John Doe,john.doe@bank.com,9876543210
+10002,West Branch,2345678901,Los Angeles,westbranch@bank.com,Jane Smith,jane.smith@bank.com,8765432109
+10003,East Branch,3456789012,Chicago,eastbranch@bank.com,Robert Brown,robert.brown@bank.com,7654321098
+10004,South Branch,4567890123,Houston,southbranch@bank.com,Emily Davis,emily.davis@bank.com,6543210987
+10005,North Branch,5678901234,San Francisco,northbranch@bank.com,Michael Wilson,michael.wilson@bank.com,5432109876
+10006,Central Branch,6789012345,Seattle,centralbranch@bank.com,Sarah Johnson,sarah.johnson@bank.com,4321098765
+10007,Midwest Branch,7890123456,Denver,midwestbranch@bank.com,David Lee,david.lee@bank.com,3210987654
+10008,Coastal Branch,8901234567,Miami,coastalbranch@bank.com,Linda White,linda.white@bank.com,2109876543
+10009,Mountain Branch,9012345678,Phoenix,mountainbranch@bank.com,James Green,james.green@bank.com,1098765432
+10010,Valley Branch,0123456789,Las Vegas,valleybranch@bank.com,Patricia Hall,patricia.hall@bank.com,0987654321
+10011,Island Branch,1234509876,Honolulu,islandbranch@bank.com,Christopher Adams,christopher.adams@bank.com,9876501234
+10012,River Branch,2345610987,Portland,riverbranch@bank.com,Elizabeth Clark,elizabeth.clark@bank.com,8765402345

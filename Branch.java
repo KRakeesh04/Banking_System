@@ -1,7 +1,9 @@
+import java.util.ArrayList;
+
 import exceptions.*;
 
 public class Branch {
-    private static String MasterKey;
+    private static String MasterKey = "It's a secret key";
     private String branchName;
     private int branchID;
     private String contactNo;
@@ -10,6 +12,7 @@ public class Branch {
     private String branchManegerName;
     private String branchManagerEmail;
     private String branchManagerPhoneNo;
+    private ArrayList<account> branchAccounts;
 
     Branch(String branchName, int branchID, String contactNo, String location, String branchEmail, String branchManegerName, String branchManagerEmail, String branchManagerPhoneNo) {
         this.branchName = branchName;
@@ -48,7 +51,16 @@ public class Branch {
         return this.branchManagerPhoneNo;
     }
 
+
     
+    public void addAccountToBranch(account acc){
+        branchAccounts.add(acc);
+    }
+    
+
+
+
+
     // setter method to set values for some attributes after verified with masterkey
     public void setBranchName(String branchName, String key) throws InvalidMasterKeyException {
         if(MasterKey.equals(key)){
