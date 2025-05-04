@@ -238,7 +238,37 @@ public class bankDatabase {
     }
 
 
-    
+//     public static void main(String[] args) {
+//         bankDatabase db = new bankDatabase();
+//         String custoFilePath = "./database/users.csv";
+//         String branchFilePath = "./database/branches.csv";
+//         String accFilePath = "./database/accounts.csv";
+//         String transFilePath = "./database/transectionsOfCustomers.csv";
+
+//         db.DBInitialize(db.customerDatabase, custoFilePath, db.branchDatabase, branchFilePath, db.accountsDatabase, accFilePath, db.transectionDatabase, transFilePath);
+        
+//         // Print the customer database
+//         for (Customer customer : db.customerDatabase.values()) {
+//             System.out.println(customer.getCustomerName() + " " + customer.getCustomerID() + " " + customer.getPassword());
+//         }
+//         System.out.println("---------------------------------");
+//         // Print the branch database
+//         for (Branch branch : db.branchDatabase.values()) {
+//             System.out.println(branch.getBranchName() + " " + branch.getBranchID() + " " + branch.getBranchManagerName());
+//         }
+//         System.out.println("---------------------------------");
+//         // Print the accounts database
+//         for (account acc : db.accountsDatabase.values()) {
+//             System.out.println(acc.getAccNo() + " " + acc.getAccType() + " " + acc.getCustomerName());
+//         }
+//         System.out.println("---------------------------------");
+//         // Print the transection database
+//         for (Transection transection : db.transectionDatabase.values()) {
+//             System.out.println(transection.getAcc_No() + " " + transection.getTransectionType() + " " + transection.getTransectionDate());
+//         }
+        
+//     }
+
 }
 
 
