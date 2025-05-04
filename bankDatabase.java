@@ -166,7 +166,7 @@ public class bankDatabase {
                     Transection newTransection = new Transection(transectionID, transectionType, transectionDate, transectionAmount, transectionDescription, acc_No);
                     this.transectionDatabase.put(String.valueOf(transectionID), newTransection);
                 }
-                
+
             }
         } catch (FileNotFoundException e) {
             System.out.println("File not found: " + filePath);
@@ -223,22 +223,6 @@ public class bankDatabase {
         }
     }
     
-    /***** method to update all data to the local database when logOut *****/
-    public void localDBUpdate(HashMap<String,Customer> customerDatabase, String custoFilePath, HashMap<String,account> accountsDatabase, String accFilePath, HashMap<String,Transection> transectionDatabase, String transFilePath){
-        this.updateCustomersToLocalDatabase(customerDatabase, custoFilePath);
-        this.updateAccountsToLocalDatabase(accountsDatabase, accFilePath);
-        this.updateTransectionToLocalDatabase(transectionDatabase, transFilePath);
-    }
-    
-    
-    /***** method to read all data from the database *****/
-    public void DBInitialize(HashMap<String,Customer> customerDatabase, String custoFilePath, HashMap<String,Branch> branchDatabase, String branchFilePath, HashMap<String,account> accountsDatabase, String accFilePath, HashMap<String,Transection> transectionDatabase, String transFilePath){
-        customerDatabase = this.ReadFromCustomerDataBase(custoFilePath);
-        branchDatabase = this.ReadFromBranchDataBase(branchFilePath);
-        accountsDatabase = this.ReadFromAccountsDataBase(accFilePath);
-        transectionDatabase = this.ReadFromTransectionDataBase(transFilePath);
-    }
-
     /***** method to add new branch data to the local database *****/
     public void addNewBrancheToLocalDatabase(Branch branchesDetail, String filePath){
         // Write the updated branch data to the file
@@ -247,6 +231,25 @@ public class bankDatabase {
         } catch (IOException e) {
             System.out.println("Error writing to file: " + e.getMessage());
         }
+    }
+    
+    /***** method to update all data to the local database when logOut *****/
+    // This method is used to update all data to the local database
+    // Should be called once logOut from the system (Exiting the system)
+    public void localDBUpdate(HashMap<String,Customer> customerDatabase, String custoFilePath, HashMap<String,account> accountsDatabase, String accFilePath, HashMap<String,Transection> transectionDatabase, String transFilePath){
+        this.updateCustomersToLocalDatabase(customerDatabase, custoFilePath);
+        this.updateAccountsToLocalDatabase(accountsDatabase, accFilePath);
+        this.updateTransectionToLocalDatabase(transectionDatabase, transFilePath);
+    }
+    
+    /***** method to read all data from the database *****/
+    // This method is used to initialize the database with data from files
+    // Should be called once logIn to the system
+    public void DBInitialize(HashMap<String,Customer> customerDatabase, String custoFilePath, HashMap<String,Branch> branchDatabase, String branchFilePath, HashMap<String,account> accountsDatabase, String accFilePath, HashMap<String,Transection> transectionDatabase, String transFilePath){
+        customerDatabase = this.ReadFromCustomerDataBase(custoFilePath);
+        branchDatabase = this.ReadFromBranchDataBase(branchFilePath);
+        accountsDatabase = this.ReadFromAccountsDataBase(accFilePath);
+        transectionDatabase = this.ReadFromTransectionDataBase(transFilePath);
     }
 
 
