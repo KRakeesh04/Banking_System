@@ -140,23 +140,29 @@ public class bankDatabase {
             br.readLine(); // Skip the header line
             while ((line = br.readLine()) != null) {
                 String[] data = line.split(",");
-                int acc_No = Integer.parseInt(data[0]);
+                if (data[0].strip().isEmpty()) {
+                    // Skip this line if acc_No is empty
+                    // System.out.println("Skipping invalid line: " + line);
+                    continue;
+                }
+
+                int acc_No = Integer.parseInt(data[0].strip()); // Parse acc_No
 
                 String[] values = data[1].split(",");
-                int transectionID = 0;
+                long transectionID = 0;
                 String transectionType = "";
                 String transectionDate = "";
                 double transectionAmount = 0.00;
                 String transectionDescription = "";
                 for (int i = 0; i < values.length; i++) {
                     String[] transectionDetails = values[i].split("#");
-                    transectionID = Integer.parseInt(transectionDetails[0].strip());
-                    transectionType = transectionDetails[1].strip();
+                    transectionID = Long.parseLong(transectionDetails[0].strip().replace("\"", ""));
+                    transectionType = transectionDetails[1].strip().equals("d") ? "Deposit" : "Withdraw";
                     transectionDescription = transectionDetails[2].strip();
                     transectionAmount = Double.parseDouble(transectionDetails[3].strip());
                     transectionDate = transectionDetails[4].strip();
 
-                    // Create and add a new transection object with the read data
+                    // Create and add a new Transection object with the read data
                     Transection newTransection = new Transection(transectionID, transectionType, transectionDate, transectionAmount, transectionDescription, acc_No);
                     this.transectionDatabase.put(String.valueOf(transectionID), newTransection);
                 }
