@@ -10,40 +10,45 @@ public class account{
     private AccountType acctype;
     private String customerName;
     private int customerID;
-    private double amount = 0.00;
+    private double currentBalance = 0.00;
     private double interestRate;
     private int PIN = 0000;
     private String createdDate;
     private Status currentStatus;
+    private double initialAmount;
 
     // account(){
     //     this.setCreatedDate();
     // }
-    account(int acc_No, int branchID, String branchName, AccountType type, String customerName, int customerID,double amount, int PIN){
+    // cunstructor method to create new accounts
+    account(int acc_No, int branchID, String branchName, AccountType type, String customerName, int customerID,double currentBalance, int PIN){
         this.acc_No = acc_No;
         this.branchID = branchID;
         this.branchName = branchName;
         this.acctype = type;
         this.customerName = customerName;
         this.customerID = customerID;
-        this.amount = amount;
+        this.currentBalance = currentBalance;
         this.interestRate = this.acctype.getInterestRate();
         this.PIN = PIN;
         this.currentStatus = Status.Active ;
+        this.initialAmount = currentBalance;
         this.setCreatedDate();
     }
-    account(int acc_No, int branchID, String branchName, AccountType type, String customerName, int customerID,double amount, int PIN, String createdDate, Status status){
+    // cunstructor method to read data from database
+    account(int acc_No, int branchID, String branchName, AccountType type, String customerName, int customerID,double currentBalance, int PIN, String createdDate, Status status, double initialAmount){
         this.acc_No = acc_No;
         this.branchID = branchID;
         this.branchName = branchName;
         this.acctype = type;
         this.customerName = customerName;
         this.customerID = customerID;
-        this.amount = amount;
+        this.currentBalance = currentBalance;
         this.interestRate = this.acctype.getInterestRate();
         this.PIN = PIN;
         this.currentStatus = status;
         this.createdDate = createdDate;
+        this.initialAmount = initialAmount;
     }
     
 
@@ -68,21 +73,21 @@ public class account{
 
     
     // method to make deposit
-    public void depositMoney(double amount, boolean ShowConfirmmation){
-        this.amount += amount;
+    public void depositMoney(double currentBalance, boolean ShowConfirmmation){
+        this.currentBalance += currentBalance;
         if(ShowConfirmmation){
             System.out.println("Sucessfully deposited.");
         }
     }
-    public void depositMoney(double amount){
-        this.depositMoney(amount, false);
+    public void depositMoney(double currentBalance){
+        this.depositMoney(currentBalance, false);
     }
     
 
     // method to make a withdrawal
-    public void withdrawMoney(double amount) throws InvalidAmountException, InactiveAccStatusException{
-        if(this.amount >= amount && this.currentStatus == Status.Active){
-            this.amount -= amount;
+    public void withdrawMoney(double currentBalance) throws InvalidAmountException, InactiveAccStatusException{
+        if(this.currentBalance >= currentBalance && this.currentStatus == Status.Active){
+            this.currentBalance -= currentBalance;
             System.out.println("Withdrawal sucessfully completed.");
         }
         else if(this.currentStatus != Status.Active){
@@ -94,10 +99,10 @@ public class account{
     }
 
     // method to transfer money
-    public void transferMoney(account toAcc, double amount) throws InvalidAmountException, InactiveAccStatusException{
-        if(this.amount >= amount && this.currentStatus == Status.Active){
-            this.amount -= amount;
-            toAcc.depositMoney(amount);
+    public void transferMoney(account toAcc, double currentBalance) throws InvalidAmountException, InactiveAccStatusException{
+        if(this.currentBalance >= currentBalance && this.currentStatus == Status.Active){
+            this.currentBalance -= currentBalance;
+            toAcc.depositMoney(currentBalance);
             System.out.println("Transfer sucessfully completed.");
         }
         else if(this.currentStatus != Status.Active){
@@ -112,7 +117,7 @@ public class account{
     // method to get the balance
     public double getBalance() throws InactiveAccStatusException{
         if(this.currentStatus == Status.Active){
-            return this.amount;
+            return this.currentBalance;
         }
         else{
             throw new InactiveAccStatusException("Your account is inactive. Please contact the bank.");
@@ -122,8 +127,8 @@ public class account{
     // method to calculate and add interest
     public void calculateInterest() throws InactiveAccStatusException{
         if(this.currentStatus == Status.Active){
-            // double interest = this.amount * this.interestRate;
-            // this.amount += interest;
+            // double interest = this.currentBalance * this.interestRate;
+            // this.currentBalance += interest;
             //TODO: calculation for the interest 
         }
         else{

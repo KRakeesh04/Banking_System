@@ -239,8 +239,14 @@ public class bankDatabase {
         transectionDatabase = this.ReadFromTransectionDataBase(transFilePath);
     }
 
+    /***** method to add new branch data to the local database *****/
     public void addNewBrancheToLocalDatabase(Branch branchesDetail, String filePath){
-
+        // Write the updated branch data to the file
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath, true))) {
+            bw.write(branchesDetail.getBranchID() + "," + branchesDetail.getBranchName() + "," + branchesDetail.getContactNo() + "," + branchesDetail.getLocation() + "," + branchesDetail.getBranchEmail() + "," + branchesDetail.getBranchManagerName() + "," + branchesDetail.getBranchManagerEmail() + "," + branchesDetail.getBranchManagerPhoneNo() + "\n");
+        } catch (IOException e) {
+            System.out.println("Error writing to file: " + e.getMessage());
+        }
     }
 
 

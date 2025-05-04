@@ -9,20 +9,21 @@ public class Branch {
     private String contactNo;
     private String location;
     private String branchEmail;
-    private String branchManegerName;
+    private String branchManagerName;
     private String branchManagerEmail;
     private String branchManagerPhoneNo;
     private ArrayList<account> branchAccounts;
 
-    Branch(String branchName, int branchID, String contactNo, String location, String branchEmail, String branchManegerName, String branchManagerEmail, String branchManagerPhoneNo) {
+    Branch(String branchName, int branchID, String contactNo, String location, String branchEmail, String branchManagerName, String branchManagerEmail, String branchManagerPhoneNo) {
         this.branchName = branchName;
         this.branchID = branchID;
         this.contactNo = contactNo;
         this.location = location;
         this.branchEmail = branchEmail;
-        this.branchManegerName = branchManegerName;
+        this.branchManagerName = branchManagerName;
         this.branchManagerEmail = branchManagerEmail;
         this.branchManagerPhoneNo = branchManagerPhoneNo;
+        this.branchAccounts = new ArrayList<>(); // Initialize the list
     }
 
     // getter method to get information about the branch
@@ -41,8 +42,8 @@ public class Branch {
     public String getBranchEmail() {
         return this.branchEmail;
     }
-    public String getBranchManegerName() {
-        return this.branchManegerName;
+    public String getBranchManagerName() {
+        return this.branchManagerName;
     }
     public String getBranchManagerEmail() {
         return this.branchManagerEmail;
@@ -78,9 +79,9 @@ public class Branch {
             throw new InvalidMasterKeyException("Incorrect MasterKey");
         }
     }
-    public void setBranchManegerName(String branchManegerName, String key) throws InvalidMasterKeyException {
+    public void setbranchManagerName(String branchManagerName, String key) throws InvalidMasterKeyException {
         if(MasterKey.equals(key)){
-            this.branchManegerName = branchManegerName;
+            this.branchManagerName = branchManagerName;
         }
         else{
             throw new InvalidMasterKeyException("Incorrect MasterKey");

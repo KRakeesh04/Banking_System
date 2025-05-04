@@ -1,5 +1,5 @@
 public class Transection {
-    private int transectionID; //random 10 digit number
+    private long transectionID; //random 16 - 20 digit number
     private String transectionType; // deposit, withdraw, transfer
     private String transectionDate; // date and time of transection
     private double transectionAmount; // amount of transection
@@ -8,7 +8,7 @@ public class Transection {
     private String transectionStatus; // status of transection (success, failed, pending)
     // private String transectionMethod; // method of transection (ATM, online banking, branch visit)
 
-    public Transection(int transectionID, String transectionType, String transectionDate, double transectionAmount, String transectionDescription, int acc_No) {
+    public Transection(long transectionID, String transectionType, String transectionDate, double transectionAmount, String transectionDescription, int acc_No) {
         this.transectionID = transectionID;
         this.transectionType = transectionType;
         this.transectionDate = transectionDate;
