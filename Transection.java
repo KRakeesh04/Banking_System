@@ -17,4 +17,28 @@ public class Transection {
         this.acc_No = acc_No;
         this.transectionStatus = "success"; // default status
     }
+
+    public long getTransectionID() {
+        return transectionID;
+    }
+    public String getTransectionType() {
+        return transectionType;
+    }
+    public String getTransectionDate() {
+        return transectionDate;
+    }
+    public double getTransectionAmount() {
+        return transectionAmount;
+    }
+    public String getTransectionDescription() {
+        return transectionDescription;
+    }
+    public int getAcc_No() {
+        return acc_No;
+    }
+    public String getTransectionStatus() {
+        return transectionStatus;
+    }
+
+    
 }

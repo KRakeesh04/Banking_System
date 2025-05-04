@@ -82,5 +82,8 @@ public class Customer {
         this.accountsOfCustomer.add(a);
     }
 
+    public ArrayList<account> getAccountsOfCustomer(){
+        return this.accountsOfCustomer;
+    }
 
 }

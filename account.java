@@ -176,6 +176,14 @@ public class account{
     public int getBranchID(){
         return this.branchID;
     }
+
+    public double getInitialAmount(){
+        return this.initialAmount;
+    }
+
+    public double getBalanceForDB(){
+        return this.currentBalance;
+    }
 }
 
 
