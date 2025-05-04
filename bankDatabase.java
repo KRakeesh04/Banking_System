@@ -1,6 +1,8 @@
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,7 +24,7 @@ public class bankDatabase {
 
 
     /***** method to read customer data from the database *****/
-    public HashMap<String,Customer> ReadFromCustomerDataBase(String filePath){
+    private HashMap<String,Customer> ReadFromCustomerDataBase(String filePath){
         String line;
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             br.readLine(); // Skip the header line
@@ -59,7 +61,7 @@ public class bankDatabase {
 
 
     /***** method to read branch data from the database *****/
-    public HashMap<String,Branch> ReadFromBranchDataBase(String filePath){
+    private HashMap<String,Branch> ReadFromBranchDataBase(String filePath){
         String line;
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             br.readLine(); // Skip the header line
@@ -89,7 +91,7 @@ public class bankDatabase {
 
     
     /***** method to read account data from the database *****/
-    public HashMap<String,account> ReadFromAccountsDataBase(String filePath){
+    private HashMap<String,account> ReadFromAccountsDataBase(String filePath){
         String line;
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             br.readLine();
@@ -97,7 +99,7 @@ public class bankDatabase {
                 String[] data = line.split(",");
                 int acc_No = Integer.parseInt(data[0]);
                 AccountType acctype = AccountType.valueOf(data[1]);
-                // double initialAmount = Double.parseDouble(data[2]);
+                double initialAmount = Double.parseDouble(data[2]);
                 // double interestRate = Double.parseDouble(data[3]);
                 String customerName = data[4];
                 int customerID = Integer.parseInt(data[5]);
@@ -109,7 +111,7 @@ public class bankDatabase {
                 double balanceAmount = Double.parseDouble(data[11]);
                 
                 // Create and add a new account object with the read data
-                account newAccount = new     account(acc_No, branchID, branchName, acctype, customerName, customerID, balanceAmount, PIN, createdDate, currentStatus);
+                account newAccount = new account(acc_No, branchID, branchName, acctype, customerName, customerID, balanceAmount, PIN, createdDate, currentStatus, initialAmount);
                 this.accountsDatabase.put(String.valueOf(acc_No), newAccount);
 
                 // Add the account to the corresponding branch
@@ -132,7 +134,7 @@ public class bankDatabase {
     
 
     /***** method to read transection data from the database *****/
-    public HashMap<String,Transection> ReadFromTransectionDataBase(String filePath){
+    private HashMap<String,Transection> ReadFromTransectionDataBase(String filePath) {
         String line;
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             br.readLine(); // Skip the header line
@@ -165,8 +167,8 @@ public class bankDatabase {
         } catch (IOException e) {
             System.out.println("Error reading file: " + e.getMessage());
         }
-        
-        return this.transectionDatabase ;
+
+        return this.transectionDatabase;
     }
 
 
@@ -177,8 +179,13 @@ public class bankDatabase {
     public void updateAccountsToLocalDatabase(HashMap<String,account> accountsDetail, String filePath){
 
     }
+
     public void addNewBrancheToLocalDatabase(Branch branchesDetail, String filePath){
 
     }
 
+
+    
 }
+
+
