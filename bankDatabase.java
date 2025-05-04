@@ -170,14 +170,67 @@ public class bankDatabase {
 
         return this.transectionDatabase;
     }
-
-
-    //method to update latest details to local database when log-out the system
-    public void updateCustomersToLocalDatabase(HashMap<String,Customer> customersDetail, String filePath){
-
+    
+    
+    /***** method to update customer data to the local database *****/
+    private void updateCustomersToLocalDatabase(HashMap<String,Customer> customersDetail, String filePath){
+        // Write the updated customer data to the file
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath))) {
+            bw.write("customerID,customerName,customerNIC,address,phoneNo,dateOfBirth,email,Password,accountNumbersOfCustomer\n");
+            for (Customer customer : customersDetail.values()) {
+                bw.write(customer.getCustomerID() + "," + customer.getCustomerName() + "," + customer.getCustomerNIC() + "," + customer.getAddress() + "," + customer.getPhoneNo() + "," + customer.getDOB() + "," + customer.getEmail() + ",");
+                ArrayList<account> accounts = customer.getAccountsOfCustomer();
+                for (int i = 0; i < accounts.size(); i++) {
+                    bw.write(accounts.get(i).getAccNo());
+                    if (i < accounts.size() - 1) {
+                        bw.write(",");
+                    }
+                }
+                bw.write("\n");
+            }
+        } catch (IOException e) {
+            System.out.println("Error writing to file: " + e.getMessage());
+        }
     }
-    public void updateAccountsToLocalDatabase(HashMap<String,account> accountsDetail, String filePath){
 
+    /***** method to update account data to the local database *****/
+    private void updateAccountsToLocalDatabase(HashMap<String,account> accountsDetail, String filePath){
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath))) {
+            bw.write("acc_No,acctype,initialAmount,interestRate,customerName,customerID,branchName,branchID,PIN,currentStatus,createdDate,currentBalance\n");
+            for (account acc : accountsDetail.values()) {
+                bw.write(acc.getAccNo() + "," + acc.getAccType() + "," + acc.getInitialAmount() + "," + acc.getInterestRate() + "," + acc.getCustomerName() + "," + acc.getCustomerID() + "," + acc.getBranchName() + "," + acc.getBranchID() + "," + acc.getPIN() + "," + acc.getAccStatus() + "," + acc.getCreatedDate() + "," + acc.getBalanceForDB() + "\n");
+            }
+        } catch (IOException e) {
+            System.out.println("Error writing to file: " + e.getMessage());
+        }
+    }
+    
+    /***** method to update transection data to the local database *****/
+    private void updateTransectionToLocalDatabase(HashMap<String,Transection> transectionDetail, String filePath){
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath))) {
+            bw.write("acc_No,transections\n");
+            for (Transection trenc : transectionDetail.values()) {
+                //TODO: find a method to store the transection details back to its original form
+            }
+        } catch (IOException e) {
+            System.out.println("Error writing to file: " + e.getMessage());
+        }
+    }
+    
+    /***** method to update all data to the local database when logOut *****/
+    public void localDBUpdate(HashMap<String,Customer> customerDatabase, String custoFilePath, HashMap<String,account> accountsDatabase, String accFilePath, HashMap<String,Transection> transectionDatabase, String transFilePath){
+        this.updateCustomersToLocalDatabase(customerDatabase, custoFilePath);
+        this.updateAccountsToLocalDatabase(accountsDatabase, accFilePath);
+        this.updateTransectionToLocalDatabase(transectionDatabase, transFilePath);
+    }
+    
+    
+    /***** method to read all data from the database *****/
+    public void DBInitialize(HashMap<String,Customer> customerDatabase, String custoFilePath, HashMap<String,Branch> branchDatabase, String branchFilePath, HashMap<String,account> accountsDatabase, String accFilePath, HashMap<String,Transection> transectionDatabase, String transFilePath){
+        customerDatabase = this.ReadFromCustomerDataBase(custoFilePath);
+        branchDatabase = this.ReadFromBranchDataBase(branchFilePath);
+        accountsDatabase = this.ReadFromAccountsDataBase(accFilePath);
+        transectionDatabase = this.ReadFromTransectionDataBase(transFilePath);
     }
 
     public void addNewBrancheToLocalDatabase(Branch branchesDetail, String filePath){
