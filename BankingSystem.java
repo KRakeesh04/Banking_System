@@ -7,7 +7,7 @@ import exceptions.*;
 public class BankingSystem {
     private static String SystemUserName = "Admin001";
     private static String SystemPassword = "zxcvbnm";
-    private static HashMap<String,account> accDatabase;
+    private static HashMap<String,Account> accDatabase;
     private static HashMap<String,Customer> customerDatabase;
     private static HashMap<String,Branch> branchDatabase;
 
@@ -257,7 +257,7 @@ public class BankingSystem {
 
             // creating account and customer
             Customer newCustomer = new Customer(customerID, accPassword, customerName, customerNIC, address, phoneNo, dateOfBirth, email);
-            account newAccount = new account(acc_No, branchID, branchName, acctype, customerName, customerID, amount, PIN);
+            Account newAccount = new Account(acc_No, branchID, branchName, acctype, customerName, customerID, amount, PIN);
             newCustomer.addAccountToCustomer(newAccount);
             accDatabase.put(String.valueOf(acc_No), newAccount);
             customerDatabase.put(String.valueOf(customerID), newCustomer);
@@ -336,7 +336,7 @@ public class BankingSystem {
             double amount = scanner.nextDouble(); scanner.nextLine();
             int acc_No = 10000 + accDatabase.size() + 1; // Generate a unique account number
 
-            account newAccount = new account(acc_No, branchID, branchName, acctype, customerName, customerID, amount, PIN);
+            Account newAccount = new Account(acc_No, branchID, branchName, acctype, customerName, customerID, amount, PIN);
             accDatabase.put(String.valueOf(acc_No), newAccount);
             branchDatabase.get(branchName).addAccountToBranch(newAccount);
             customerDatabase.get(String.valueOf(branchID)).addAccountToCustomer(newAccount);

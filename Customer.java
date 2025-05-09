@@ -9,9 +9,9 @@ public class Customer {
     private String phoneNo;
     private String dateOfBirth; // format  yyyy-mm-dd
     private String email = "none";
-    private ArrayList<account> accountsOfCustomer;
+    private ArrayList<Account> accountsOfCustomer;
 
-    public Customer(int customerID, String Password, String customerName, String customerNIC, String address, String phoneNo, String dateOfBirth, String email, ArrayList<account> accountsOfCustomer){
+    public Customer(int customerID, String Password, String customerName, String customerNIC, String address, String phoneNo, String dateOfBirth, String email, ArrayList<Account> accountsOfCustomer){
         this.customerID = customerID;
         this.Password = Password;
         this.customerName = customerName;
@@ -78,11 +78,11 @@ public class Customer {
         return this.Password;
     }
 
-    public void addAccountToCustomer(account a){
+    public void addAccountToCustomer(Account a){
         this.accountsOfCustomer.add(a);
     }
 
-    public ArrayList<account> getAccountsOfCustomer(){
+    public ArrayList<Account> getAccountsOfCustomer(){
         return this.accountsOfCustomer;
     }
 

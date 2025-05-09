@@ -11,7 +11,7 @@ import java.util.HashMap;
 public class bankDatabase {
     private HashMap<String,Customer> customerDatabase;
     private HashMap<String,Branch> branchDatabase;
-    private HashMap<String,account> accountsDatabase;
+    private HashMap<String,Account> accountsDatabase;
     private HashMap<String,Transection> transectionDatabase;
 
 
@@ -40,7 +40,7 @@ public class bankDatabase {
                 String Password = data[7];
                 
                 String[] values = data[8].split(",");
-                ArrayList<account> accountsOfCustomer = new ArrayList<>();
+                ArrayList<Account> accountsOfCustomer = new ArrayList<>();
                 for (int i = 0; i < values.length; i++) {
                     accountsOfCustomer.add(this.accountsDatabase.get(values[i]));
                 }
@@ -75,7 +75,7 @@ public class bankDatabase {
                 String branchManegerName = data[5];
                 String branchManagerEmail = data[6];
                 String branchManagerPhoneNo = data[7];
-                // ArrayList<account> branchAccounts;
+                // ArrayList<Account> branchAccounts;
 
                 Branch newBranch = new Branch(branchName, branchID, contactNo, location, branchEmail, branchManegerName, branchManagerEmail, branchManagerPhoneNo);
                 this.branchDatabase.put(String.valueOf(branchID), newBranch);
@@ -91,7 +91,7 @@ public class bankDatabase {
 
     
     /***** method to read account data from the database *****/
-    private HashMap<String,account> ReadFromAccountsDataBase(String filePath){
+    private HashMap<String,Account> ReadFromAccountsDataBase(String filePath){
         String line;
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             br.readLine();
@@ -111,7 +111,7 @@ public class bankDatabase {
                 double balanceAmount = Double.parseDouble(data[11]);
                 
                 // Create and add a new account object with the read data
-                account newAccount = new account(acc_No, branchID, branchName, acctype, customerName, customerID, balanceAmount, PIN, createdDate, currentStatus, initialAmount);
+                Account newAccount = new Account(acc_No, branchID, branchName, acctype, customerName, customerID, balanceAmount, PIN, createdDate, currentStatus, initialAmount);
                 this.accountsDatabase.put(String.valueOf(acc_No), newAccount);
 
                 // Add the account to the corresponding branch
@@ -185,7 +185,7 @@ public class bankDatabase {
             bw.write("customerID,customerName,customerNIC,address,phoneNo,dateOfBirth,email,Password,accountNumbersOfCustomer\n");
             for (Customer customer : customersDetail.values()) {
                 bw.write(customer.getCustomerID() + "," + customer.getCustomerName() + "," + customer.getCustomerNIC() + "," + customer.getAddress() + "," + customer.getPhoneNo() + "," + customer.getDOB() + "," + customer.getEmail() + ",");
-                ArrayList<account> accounts = customer.getAccountsOfCustomer();
+                ArrayList<Account> accounts = customer.getAccountsOfCustomer();
                 for (int i = 0; i < accounts.size(); i++) {
                     bw.write(accounts.get(i).getAccNo());
                     if (i < accounts.size() - 1) {
@@ -200,10 +200,10 @@ public class bankDatabase {
     }
 
     /***** method to update account data to the local database *****/
-    private void updateAccountsToLocalDatabase(HashMap<String,account> accountsDetail, String filePath){
+    private void updateAccountsToLocalDatabase(HashMap<String,Account> accountsDetail, String filePath){
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath))) {
             bw.write("acc_No,acctype,initialAmount,interestRate,customerName,customerID,branchName,branchID,PIN,currentStatus,createdDate,currentBalance\n");
-            for (account acc : accountsDetail.values()) {
+            for (Account acc : accountsDetail.values()) {
                 bw.write(acc.getAccNo() + "," + acc.getAccType() + "," + acc.getInitialAmount() + "," + acc.getInterestRate() + "," + acc.getCustomerName() + "," + acc.getCustomerID() + "," + acc.getBranchName() + "," + acc.getBranchID() + "," + acc.getPIN() + "," + acc.getAccStatus() + "," + acc.getCreatedDate() + "," + acc.getBalanceForDB() + "\n");
             }
         } catch (IOException e) {
@@ -236,7 +236,7 @@ public class bankDatabase {
     /***** method to update all data to the local database when logOut *****/
     // This method is used to update all data to the local database
     // Should be called once logOut from the system (Exiting the system)
-    public void localDBUpdate(HashMap<String,Customer> customerDatabase, String custoFilePath, HashMap<String,account> accountsDatabase, String accFilePath, HashMap<String,Transection> transectionDatabase, String transFilePath){
+    public void localDBUpdate(HashMap<String,Customer> customerDatabase, String custoFilePath, HashMap<String,Account> accountsDatabase, String accFilePath, HashMap<String,Transection> transectionDatabase, String transFilePath){
         this.updateCustomersToLocalDatabase(customerDatabase, custoFilePath);
         this.updateAccountsToLocalDatabase(accountsDatabase, accFilePath);
         this.updateTransectionToLocalDatabase(transectionDatabase, transFilePath);
@@ -245,7 +245,7 @@ public class bankDatabase {
     /***** method to read all data from the database *****/
     // This method is used to initialize the database with data from files
     // Should be called once logIn to the system
-    public void DBInitialize(HashMap<String,Customer> customerDatabase, String custoFilePath, HashMap<String,Branch> branchDatabase, String branchFilePath, HashMap<String,account> accountsDatabase, String accFilePath, HashMap<String,Transection> transectionDatabase, String transFilePath){
+    public void DBInitialize(HashMap<String,Customer> customerDatabase, String custoFilePath, HashMap<String,Branch> branchDatabase, String branchFilePath, HashMap<String,Account> accountsDatabase, String accFilePath, HashMap<String,Transection> transectionDatabase, String transFilePath){
         customerDatabase = this.ReadFromCustomerDataBase(custoFilePath);
         branchDatabase = this.ReadFromBranchDataBase(branchFilePath);
         accountsDatabase = this.ReadFromAccountsDataBase(accFilePath);
@@ -273,7 +273,7 @@ public class bankDatabase {
 //         }
 //         System.out.println("---------------------------------");
 //         // Print the accounts database
-//         for (account acc : db.accountsDatabase.values()) {
+//         for (Account acc : db.accountsDatabase.values()) {
 //             System.out.println(acc.getAccNo() + " " + acc.getAccType() + " " + acc.getCustomerName());
 //         }
 //         System.out.println("---------------------------------");

@@ -12,7 +12,7 @@ public class Branch {
     private String branchManagerName;
     private String branchManagerEmail;
     private String branchManagerPhoneNo;
-    private ArrayList<account> branchAccounts;
+    private ArrayList<Account> branchAccounts;
 
     Branch(String branchName, int branchID, String contactNo, String location, String branchEmail, String branchManagerName, String branchManagerEmail, String branchManagerPhoneNo) {
         this.branchName = branchName;
@@ -54,7 +54,7 @@ public class Branch {
 
 
     
-    public void addAccountToBranch(account acc){
+    public void addAccountToBranch(Account acc){
         branchAccounts.add(acc);
     }
     

@@ -3,7 +3,7 @@ import java.time.format.DateTimeFormatter;
 
 import exceptions.*;;
 
-public class account{
+public class Account{
     private int acc_No;
     private int branchID;
     private String branchName;
@@ -21,7 +21,7 @@ public class account{
     //     this.setCreatedDate();
     // }
     // cunstructor method to create new accounts
-    account(int acc_No, int branchID, String branchName, AccountType type, String customerName, int customerID,double currentBalance, int PIN){
+    Account(int acc_No, int branchID, String branchName, AccountType type, String customerName, int customerID,double currentBalance, int PIN){
         this.acc_No = acc_No;
         this.branchID = branchID;
         this.branchName = branchName;
@@ -36,7 +36,7 @@ public class account{
         this.setCreatedDate();
     }
     // cunstructor method to read data from database
-    account(int acc_No, int branchID, String branchName, AccountType type, String customerName, int customerID,double currentBalance, int PIN, String createdDate, Status status, double initialAmount){
+    Account(int acc_No, int branchID, String branchName, AccountType type, String customerName, int customerID,double currentBalance, int PIN, String createdDate, Status status, double initialAmount){
         this.acc_No = acc_No;
         this.branchID = branchID;
         this.branchName = branchName;
@@ -99,7 +99,7 @@ public class account{
     }
 
     // method to transfer money
-    public void transferMoney(account toAcc, double currentBalance) throws InvalidAmountException, InactiveAccStatusException{
+    public void transferMoney(Account toAcc, double currentBalance) throws InvalidAmountException, InactiveAccStatusException{
         if(this.currentBalance >= currentBalance && this.currentStatus == Status.Active){
             this.currentBalance -= currentBalance;
             toAcc.depositMoney(currentBalance);
