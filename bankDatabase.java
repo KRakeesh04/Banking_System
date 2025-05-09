@@ -11,7 +11,7 @@ public class bankDatabase {
     private HashMap<String, Customer> customerDatabase;
     private HashMap<String, Branch> branchDatabase;
     private HashMap<String, Account> accountsDatabase;
-    private HashMap<String, Transaction> transactionDatabase;
+    private HashMap<String, ArrayList<Transaction>> transactionDatabase;
 
     public bankDatabase() {
         this.customerDatabase = new HashMap<>();
@@ -130,7 +130,7 @@ public class bankDatabase {
     }
 
     /***** method to read transaction data from the database *****/
-    private HashMap<String, Transaction> ReadFromTransactionDataBase(String filePath) {
+    private HashMap<String, ArrayList<Transaction>> ReadFromTransactionDataBase(String filePath) {
         String line;
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             br.readLine(); // Skip the header line
@@ -150,6 +150,8 @@ public class bankDatabase {
                 String transactionDate = "";
                 double transactionAmount = 0.00;
                 String transactionDescription = "";
+                ArrayList<Transaction> transactions = new ArrayList<>();
+                // Loop through the transaction details
                 for (int i = 0; i < values.length; i++) {
                     String[] transactionDetails = values[i].split("#");
                     transactionID = Long.parseLong(transactionDetails[0].strip().replace("\"", ""));
@@ -161,8 +163,9 @@ public class bankDatabase {
                     // Create and add a new Transaction object with the read data
                     Transaction newTransaction = new Transaction(transactionID, transactionType, transactionDate,
                             transactionAmount, transactionDescription, acc_No);
-                    this.transactionDatabase.put(String.valueOf(transactionID), newTransaction);
+                    transactions.add(newTransaction);
                 }
+                this.transactionDatabase.put(String.valueOf(acc_No), transactions);
 
             }
         } catch (FileNotFoundException e) {
@@ -217,13 +220,27 @@ public class bankDatabase {
     /***** method to update transaction data to the local database *****/
     private void updateTransactionToLocalDatabase(HashMap<String, Account> accountDetails,
             HashMap<String, Transaction> transactionDetail, String filePath) {
-        HashMap<String, String> trancDB;
-
+        HashMap<String, String> transDB = new HashMap<>();
+        for (String acc_no : accountDetails.keySet()) {
+            ArrayList<Transaction> transactions = this.transactionDatabase.get(acc_no);
+            if (transactions != null) {
+                String transactionDetailString = "";
+                for (Transaction transaction : transactions) {
+                    transactionDetailString += transaction.getTransactionID() + " # "
+                            + (transaction.getTransactionType() == "Deposit" ? "d" : "w") + " # "
+                            + " # " + transaction.getTransactionDescription() + " # "
+                            + transaction.getTransactionAmount() + " # " + transaction.getTransactionDate() + ",";
+                }
+                transactionDetailString = transactionDetailString.substring(0, transactionDetailString.length() - 1);
+                transDB.put(acc_no, transactionDetailString);
+            }
+        }
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath))) {
             bw.write("acc_No,transactions\n");
-            for (Transaction transactions : transactionDetail.values()) {
-                // TODO: find a method to store the transaction details back to its original
+            for (String acc_no : transDB.keySet()) {
+                bw.write(acc_no + "," + transDB.get(acc_no) + "\n");
             }
+
         } catch (IOException e) {
             System.out.println("Error writing to file: " + e.getMessage());
         }
@@ -258,7 +275,7 @@ public class bankDatabase {
     // Should be called once logIn to the system
     public void DBInitialize(HashMap<String, Customer> customerDatabase, String custoFilePath,
             HashMap<String, Branch> branchDatabase, String branchFilePath, HashMap<String, Account> accountsDatabase,
-            String accFilePath, HashMap<String, Transaction> transactionDatabase, String transFilePath) {
+            String accFilePath, HashMap<String, ArrayList<Transaction>> transactionDatabase, String transFilePath) {
         customerDatabase = this.ReadFromCustomerDataBase(custoFilePath);
         branchDatabase = this.ReadFromBranchDataBase(branchFilePath);
         accountsDatabase = this.ReadFromAccountsDataBase(accFilePath);
