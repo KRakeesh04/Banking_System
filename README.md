@@ -7,7 +7,7 @@ This is a Java-based Banking System application (terminal-based) that simulates 
 ## Folder Structure
 
 The project is organized as follows:
-
+```text
 Banking_System/  
 ├── BankingSystem.java          
 ├── account.java                
@@ -32,18 +32,20 @@ Banking_System/
 │   └── users.csv               
 ├── .gitignore                  
 └── README.md                 
-
+```
 
 ## How to Run
 
 1. **Clone the Repository**:
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/KRakeesh04/Banking_System.git
    cd Banking_System
 2. **Compile and run**:
    ```bash
    javac BankingSystem.java
    java BankingSystem
+### Future implementations
+1. change data from csv files to mysql
+2. create UI using jframe
 
-
- For any suggestions, feel free to reach out to me
+For any suggestions, feel free to reach out to me
