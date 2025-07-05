@@ -510,9 +510,9 @@ public class BankingSystem {
     // method to create a new account
     private void CreateAccount(boolean isNewUsr, Customer person) {
         // Add code to handle account creation
-        Scanner scanner = new Scanner(System.in);
+        // Scanner scanner = new Scanner(System.in);
         System.out.println("Create an Account");
-        System.out.println("Please enter your details to create an account");
+        System.out.println("Please enter the details to create account");
         if(isNewUsr){
             System.out.print("Customer Name: ");
             String customerName = scanner.nextLine();
@@ -529,13 +529,13 @@ public class BankingSystem {
             System.out.println("     02. Current Account");
             System.out.println("     03. Fixed Deposit");
             System.out.print("Please select an option(1 or 2 or 3) :  ");
-            int typeOpt = scanner.nextInt(); scanner.nextLine();
+            int typeOpt = Integer.parseInt(scanner.nextLine());
             AccountType acctype = (typeOpt == 1)? AccountType.saving: (typeOpt == 2)?  AccountType.current: AccountType.Fixed;
-            System.out.println("To access transections for this bank account, you need to create a 4 digit PIN");
+            System.out.println("To access transactions for this bank account, you need to create a 4 digit PIN");
             int PIN;
             while(true){
                 System.out.print("Please enter your 4 digit PIN: ");
-                PIN = scanner.nextInt(); scanner.nextLine();
+                PIN = Integer.parseInt(scanner.nextLine());
                 try {
                     checkPINValidity(PIN);
                     break;
@@ -548,7 +548,7 @@ public class BankingSystem {
             // getting the password for new customer
             String accPassword = null;
             while(true){
-                System.out.print("Please enter your password for your customer account: ");
+                System.out.print("Please enter your password for customer login: ");
                 String password = scanner.nextLine();
                 System.out.print("Please re-enter your password: ");
                 String rePassword = scanner.nextLine();
@@ -556,22 +556,27 @@ public class BankingSystem {
                     accPassword = password; 
                     break;
                 } else {
+                    removeLinesInTerminal(2);
                     System.out.println("Passwords do not match. Please try again.");
                 }
             }
 
             System.out.println("Available Branches: ");
-            this.listAllBranchNames();
+            this.ListAllBranchNames();
             System.out.println();
             String branchName;
-            int branchID;
+            String branchID;
             while (true) {
-                System.out.print("Branch Name: ");
-                branchName = scanner.nextLine();
+                System.out.print("Branch ID: ");
+                branchID = scanner.nextLine().trim();
                 try {
-                    branchNameIDMatch(branchName);
-                    Branch branch = branchDatabase.get(branchName);
-                    branchID = branch.getBranchID();
+                    branchNameIDMatch(branchID);
+                    Branch branch = branchDatabase.get(branchID);
+                    if (branch == null) {
+                        System.out.println("Invalid branch ID. Please try again.");
+                        continue;
+                    }
+                    branchName = branch.getBranchName();
                     break;
                 } catch (MismatchBranchNameIDException e) {
                     this.removeLinesInTerminal(2);
@@ -580,8 +585,8 @@ public class BankingSystem {
                 }
                 
             }
-            System.out.println("Enter the amount for initial deposit: ");
-            double amount = scanner.nextDouble(); scanner.nextLine();
+            System.out.print("Enter the amount for initial deposit: ");
+            double amount = Double.parseDouble(scanner.nextLine());
             System.out.print("Email address: ");
             String email = scanner.nextLine();
             int customerID = Integer.valueOf(generateUniqueCustomerID()); // Generate a unique customer ID
@@ -589,14 +594,16 @@ public class BankingSystem {
 
             // creating account and customer
             Customer newCustomer = new Customer(customerID, accPassword, customerName, customerNIC, address, phoneNo, dateOfBirth, email);
-            Account newAccount = new Account(acc_No, branchID, branchName, acctype, customerName, customerID, amount, PIN);
-            newCustomer.addAccountToCustomer(newAccount);
+            Account newAccount = new Account(acc_No, Integer.parseInt(branchID), branchName, acctype, customerName, customerID, amount, PIN);
+            newCustomer.addAccountToCustomer(String.valueOf(acc_No));
             accDatabase.put(String.valueOf(acc_No), newAccount);
             customerDatabase.put(String.valueOf(customerID), newCustomer);
-            branchDatabase.get(branchName).addAccountToBranch(newAccount);
+            branchDatabase.get(branchID).addAccountToBranch(newAccount);
+            System.out.println("\033c");
             System.out.println("Account created successfully!");
             System.out.println("Account Number: " + acc_No);
             System.out.println("Customer ID: " + customerID);
+            System.out.println();
 
 
         } else {
@@ -605,12 +612,19 @@ public class BankingSystem {
             String customerName;
             String customerNIC;
             while (true) {
-                System.out.print("Customer ID: ");
-                customerID = scanner.nextInt(); scanner.nextLine();
-                System.out.print("Customer Name: ");
-                customerName = scanner.nextLine();
-                System.out.print("Customer NIC: ");
-                customerNIC = scanner.nextLine();
+                if(person != null) {
+                    customerID = person.getCustomerID();
+                    customerName = person.getCustomerName();
+                    customerNIC = person.getCustomerNIC();
+                    System.out.println("Customer Name: " + person.getCustomerName() + "    Customer ID: " + customerID + "    Customer NIC: " + customerNIC);
+                } else {
+                    System.out.print("Customer ID: ");
+                    customerID = Integer.parseInt(scanner.nextLine());
+                    System.out.print("Customer Name: ");
+                    customerName = scanner.nextLine();
+                    System.out.print("Customer NIC: ");
+                    customerNIC = scanner.nextLine();
+                }
                 try {
                     this.checkExistingCustomerDetails(customerID, customerName, customerNIC);
                     break;
@@ -626,13 +640,13 @@ public class BankingSystem {
             System.out.println("     02. Current Account");
             System.out.println("     03. Fixed Deposit");
             System.out.print("Please select an option(1 or 2 or 3) :  ");
-            int typeOpt = scanner.nextInt(); scanner.nextLine();
+            int typeOpt = Integer.parseInt(scanner.nextLine());
             AccountType acctype = (typeOpt == 1)? AccountType.saving: (typeOpt == 2)?  AccountType.current: AccountType.Fixed;
             System.out.println("To access transections for this bank account, you need to create a 4 digit PIN");
             int PIN;
             while(true){
                 System.out.print("Please enter your 4 digit PIN: ");
-                PIN = scanner.nextInt(); scanner.nextLine();
+                PIN = Integer.parseInt(scanner.nextLine());
                 try {
                     checkPINValidity(PIN);
                     break;
@@ -644,34 +658,39 @@ public class BankingSystem {
             }
             // getting branch detail
             System.out.println("Available Branches: ");
-            this.listAllBranchNames();
+            this.ListAllBranchNames();
             System.out.println();
             String branchName;
-            int branchID;
+            String branchID;
             while (true) {
-                System.out.print("Branch Name: ");
-                branchName = scanner.nextLine();
+                System.out.print("Branch ID: ");
+                branchID = scanner.nextLine().trim();
                 try {
-                    branchNameIDMatch(branchName);
-                    Branch branch = branchDatabase.get(branchName);
-                    branchID = branch.getBranchID();
+                    branchNameIDMatch(branchID);
+                    Branch branch = branchDatabase.get(branchID);
+                    if (branch == null) {
+                        throw new MismatchBranchNameIDException("Invalid Branch ID. Please try again.");
+                    }
+                    branchName = branch.getBranchName();
                     break;
                 } catch (MismatchBranchNameIDException e) {
-                    this.removeLinesInTerminal(2);
+                    this.removeLinesInTerminal(1);
                     System.out.println(e.getMessage());
                     continue;
                 }
                 
             }
+
             // getting initial amount for the account
-            System.out.println("Enter the amount to deposit: ");
-            double amount = scanner.nextDouble(); scanner.nextLine();
+            System.out.print("Enter the amount for initial deposit: ");
+            double amount = Double.parseDouble(scanner.nextLine());
             int acc_No = 10000 + accDatabase.size() + 1; // Generate a unique account number
 
-            Account newAccount = new Account(acc_No, branchID, branchName, acctype, customerName, customerID, amount, PIN);
+            Account newAccount = new Account(acc_No, Integer.parseInt(branchID), branchName, acctype, customerName, customerID, amount, PIN);
             accDatabase.put(String.valueOf(acc_No), newAccount);
-            branchDatabase.get(branchName).addAccountToBranch(newAccount);
-            customerDatabase.get(String.valueOf(branchID)).addAccountToCustomer(newAccount);
+            branchDatabase.get(branchID).addAccountToBranch(newAccount);
+            customerDatabase.get(String.valueOf(customerID)).addAccountToCustomer(String.valueOf(acc_No));
+            System.out.println("\033c");
             System.out.println("Account created successfully!");
             System.out.println("Account Number: " + acc_No);
             System.out.println("Customer ID: " + customerID);
