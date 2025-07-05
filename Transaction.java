@@ -18,6 +18,10 @@ public class Transaction {
         this.transactionStatus = "success"; // default status
     }
 
+    protected Transaction(){
+        // Default constructor for subclasses
+    }
+
     public long getTransactionID() {
         return transactionID;
     }
@@ -41,4 +45,27 @@ public class Transaction {
     }
 
     
+}
+
+
+class TransactionData extends Transaction {
+    private long transactionID;
+    private String transactionDate;
+    private String transactionDescription;
+    private String transactionType; // "Withdraw" or "Deposit"
+    private double transactionAmount; // Amount for Withdraw or Deposit
+    private double balanceAfterTransaction; // Balance after the transaction
+
+    public TransactionData(long transactionID, String transactionDate, String transactionDescription, String transactionType, double transactionAmount, double balanceAfterTransaction) {
+        this.transactionID = transactionID;
+        this.transactionDate = transactionDate;
+        this.transactionDescription = transactionDescription;
+        this.transactionType = transactionType;
+        this.transactionAmount = transactionAmount;
+        this.balanceAfterTransaction = balanceAfterTransaction;
+    }
+
+    public double getBalanceAfterTransaction() {
+        return this.balanceAfterTransaction;
+    }
 }
