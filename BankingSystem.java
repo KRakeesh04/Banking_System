@@ -61,11 +61,11 @@ public class BankingSystem {
         }
     }
     private void checkExistingCustomerDetails(int customerID, String customerName, String customerNIC) throws InvalidCustomerDetailException{
-        if(!customerDatabase.containsKey(String.valueOf(customerID))){
-            throw new InvalidCustomerDetailException("Customer ID does not found. Please try again.");
-        } else if( customerDatabase.get(String.valueOf(customerID)).getCustomerName() != customerName ){
+        if(!customerDatabase.containsKey(String.valueOf(customerID)) ){
+            throw new InvalidCustomerDetailException("Customer ID mismatch. Please try again.");
+        } else if( !customerName.equals(customerDatabase.get(String.valueOf(customerID)).getCustomerName()) ){
             throw new InvalidCustomerDetailException("Customer Name does not match with database details.");
-        } else if( customerDatabase.get(String.valueOf(customerID)).getCustomerNIC() != customerNIC ){
+        } else if( !customerDatabase.get(String.valueOf(customerID)).getCustomerNIC().equals(customerNIC) ){
             throw new InvalidCustomerDetailException("Customer NIC number does not match with database details.");
         }
     }
