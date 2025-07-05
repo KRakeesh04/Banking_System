@@ -15,7 +15,7 @@ Banking_System/
 ├── bankStatement.java          
 ├── Branch.java                 
 ├── Customer.java               
-├── Transection.java            
+├── Transaction.java            
 ├── writePDF.java               
 ├── exceptions/                 
 │   ├── InvalidAmountException.java  
@@ -28,7 +28,7 @@ Banking_System/
 ├── database/                         
 │   ├── accounts.csv            
 │   ├── branches.csv            
-│   ├── transectionsOfCustomers.csv  
+│   ├── transactionsOfCustomers.csv  
 │   └── users.csv               
 ├── .gitignore                  
 └── README.md                 
