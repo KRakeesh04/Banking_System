@@ -9,9 +9,10 @@ public class Customer {
     private String phoneNo;
     private String dateOfBirth; // format  yyyy-mm-dd
     private String email = "none";
-    private ArrayList<Account> accountsOfCustomer;
+    private ArrayList<String> accountsOfCustomer = new ArrayList<>();
 
-    public Customer(int customerID, String Password, String customerName, String customerNIC, String address, String phoneNo, String dateOfBirth, String email, ArrayList<Account> accountsOfCustomer){
+    // Constructor for creating a new customer with all details
+    public Customer(int customerID, String Password, String customerName, String customerNIC, String address, String phoneNo, String dateOfBirth, String email, ArrayList<String> accountsOfCustomer){
         this.customerID = customerID;
         this.Password = Password;
         this.customerName = customerName;
@@ -22,6 +23,7 @@ public class Customer {
         this.email = email;
         this.accountsOfCustomer = accountsOfCustomer;
     }
+    // Constructor for creating a new customer with email and accounts
     public Customer(int customerID, String Password, String customerName, String customerNIC, String address, String phoneNo, String dateOfBirth, String email){
         this.customerID = customerID;
         this.Password = Password;
@@ -32,6 +34,7 @@ public class Customer {
         this.dateOfBirth = dateOfBirth;
         this.email = email;
     }
+    // Constructor for creating a new customer without email and accounts
     public Customer(int customerID, String Password, String customerName, String customerNIC, String address, String phoneNo, String dateOfBirth){
         this.customerID = customerID;
         this.Password = Password;
@@ -78,11 +81,11 @@ public class Customer {
         return this.Password;
     }
 
-    public void addAccountToCustomer(Account a){
+    public void addAccountToCustomer(String a){
         this.accountsOfCustomer.add(a);
     }
 
-    public ArrayList<Account> getAccountsOfCustomer(){
+    public ArrayList<String> getAccountsOfCustomer(){
         return this.accountsOfCustomer;
     }
 
