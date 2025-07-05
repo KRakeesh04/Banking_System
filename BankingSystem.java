@@ -80,6 +80,9 @@ public class BankingSystem {
 
         return id;
     }
+    private long RandomLongGeneratorForTransactionID() {
+        Random rand = new Random();
+        long transactionID;
 
     private void listAllBranchNames(){
         for (String branch : branchDatabase.keySet()) {
