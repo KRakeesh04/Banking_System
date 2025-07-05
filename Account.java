@@ -100,16 +100,16 @@ public class Account{
     }
 
     // method to transfer money
-    public void transferMoney(Account toAcc, double currentBalance) throws InvalidAmountException, InactiveAccStatusException{
-        if(this.currentBalance >= currentBalance && this.currentStatus == Status.Active){
+    public void transferMoney(Account toAcc, double currentBalance, int PIN_4digit) throws InvalidAmountException, InactiveAccStatusException, InvalidPINException{
+        if(this.PIN != PIN_4digit){     
+            throw new InvalidPINException("Incorrect PIN. Please try again.");
+        } else if(this.currentBalance >= currentBalance && this.currentStatus == Status.Active) {
             this.currentBalance -= currentBalance;
             toAcc.depositMoney(currentBalance);
             System.out.println("Transfer sucessfully completed.");
-        }
-        else if(this.currentStatus != Status.Active){
+        } else if(this.currentStatus != Status.Active) {
             throw new InactiveAccStatusException("Your account is inactive. Please contact the bank.");
-        }
-        else{
+        } else {
             throw new InvalidAmountException("Insufficient balance to transfer.");
         }
     }
