@@ -892,8 +892,33 @@ public class BankingSystem {
 
 
 
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+
+    // method to close an account
+    private void CloseAccount(int AccNo) {
+        // This method will close an account
+        // For now, we will just print a message
+        System.out.println("Closing account number: " + AccNo);
+        Account acc = accDatabase.get(String.valueOf(AccNo));
+        if (acc != null) {
+            try {
+                acc.withdrawMoney(acc.getBalance()); // Withdraw all remaining balance
+                
+            } catch (Exception e) {
+                System.out.println("Error while closing the account: " + e.getMessage());
+                return;
+            }
+            // Set the account status to closed
+            acc.setAccStatus(Status.Closed);
+            accDatabase.put(String.valueOf(AccNo), acc);
+            System.out.println("Account closed successfully.");
+        } else {
+            System.out.println("Account not found.");
+        }
+    }
+
+    // method to initialize the banking system
+    private static void InitializeBankingSystem() {
+        // Scanner scanner = new Scanner(System.in);
         try {
 
             BankingSystem theBank = new BankingSystem();
