@@ -79,16 +79,17 @@ public class Account{
             System.out.println("Sucessfully deposited.");
         }
     }
-    public void depositMoney(double currentBalance){
+    private void depositMoney(double currentBalance){
         this.depositMoney(currentBalance, false);
     }
     
 
     // method to make a withdrawal
-    public void withdrawMoney(double currentBalance) throws InvalidAmountException, InactiveAccStatusException{
-        if(this.currentBalance >= currentBalance && this.currentStatus == Status.Active){
-            this.currentBalance -= currentBalance;
+    public void withdrawMoney(double amount) throws InvalidAmountException, InactiveAccStatusException{
+        if(this.currentStatus == Status.Active && this.currentBalance >= amount){
+            this.currentBalance -= amount;
             System.out.println("Withdrawal sucessfully completed.");
+            System.out.println("Available balance : LKR " + String.valueOf(this.getBalance()));  
         }
         else if(this.currentStatus != Status.Active){
             throw new InactiveAccStatusException("Your account is inactive. Please contact the bank.");
