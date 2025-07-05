@@ -922,22 +922,24 @@ public class BankingSystem {
         try {
 
             BankingSystem theBank = new BankingSystem();
-            System.out.println("\033c");
+            Thread.sleep(1500);
+            System.out.println("\033c");     // Clear the terminal screen
 
             while (true){
                 try {
-                    System.out.println("Welcome to the Banking System");
+                    System.out.println("Welcome to the Banking System \uD83D\uDE0A");
                     System.out.println("01. Login as Admin");
                     System.out.println("02. Login as Customer");
                     System.out.println("03. Create an account");
                     System.out.println("04. Exit");
                     System.out.print("Please select an option(1, 2, 3 or 4) :  ");
-                    int option = scanner.nextInt();
-                    scanner.nextLine(); // Consume the newline character
+                    int option = Integer.parseInt(scanner.nextLine());
+                    System.out.println("\033c"); // Clear the terminal screen
+
                     switch (option) {
                         case 1:
                             try {
-                                theBank.loginAsAdmin();
+                                theBank.LoginAsAdmin();
                             } catch (InvalidUserNamePasswordException e) {
                                 System.out.println("\033c");
                                 System.out.println(e.getMessage());
@@ -946,10 +948,15 @@ public class BankingSystem {
                             break;
                         case 2:
                             try {
-                                theBank.loginAsCustomer();
+                                theBank.LoginAsCustomer();
                             } catch (InvalidUserNamePasswordException e) {
                                 System.out.println("\033c");
+                                System.out.println("InvalidUserNamePasswordException : " + e.getMessage());
+                                continue;
+                            } catch (Exception e) { 
+                                System.out.println("\033c");
                                 System.out.println(e.getMessage());
+                                e.printStackTrace();
                                 continue;
                             }
                             break;
@@ -957,9 +964,9 @@ public class BankingSystem {
                             try {
                                 System.out.println("Are you a new customer ?");
                                 System.out.print("01) YES   or   02) NO  :");
-                                int ans = scanner.nextInt(); scanner.nextLine();
+                                int ans = Integer.parseInt(scanner.nextLine());
                                 boolean isNewUsr = (ans == 1)? true: false;
-                                theBank.createAccount(isNewUsr);
+                                theBank.CreateAccount(isNewUsr, null);
                             } catch (Exception e) {
                                 System.out.println("\033c");
                                 System.out.println(e.getMessage());
@@ -967,8 +974,9 @@ public class BankingSystem {
                             }
                             break;
                         case 4:
-                            scanner.close();
+                            // scanner.close();
                             System.out.println("Exiting the system...");
+                            bankDatabase.localDBUpdate(customerDatabase, custoFilePath, accDatabase, accFilePath, transactionDatabase, transFilePath);
                             Thread.sleep(1500);
                             System.out.println("\033c");
                             System.exit(0);
@@ -983,8 +991,9 @@ public class BankingSystem {
                     // TODO: handle exception
                     System.out.println("\033c");
                     System.out.println("An error occurred :( ");
+                    // e.printStackTrace();
                     System.out.println("Please try again.");
-                    scanner.nextLine(); // Clear the invalid input
+                    // scanner.nextLine(); // Clear the invalid input      //######################################## need to edit
                     Thread.sleep(300);
                     continue;
                 }
@@ -994,11 +1003,19 @@ public class BankingSystem {
             
             
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             System.out.println("An error occurred while initializing the banking system.");
+            System.out.println(e.getMessage());
         } finally {
-            scanner.close();
+            // scanner.close();
         }
+    }
 
+
+
+
+    // Main method to run the banking system
+    public static void main(String[] args) {
+        InitializeBankingSystem();
+        scanner.close();
     }
 }
