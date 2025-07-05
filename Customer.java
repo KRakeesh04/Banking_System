@@ -45,6 +45,26 @@ public class Customer {
         this.dateOfBirth = dateOfBirth;
     }
 
+    public void setCustomerName(String customerName){
+        this.customerName = customerName;
+    }
+
+    public void setAddress(String address){
+        this.address = address;
+    }
+
+    public void setPhoneNo(String phoneNo){
+        this.phoneNo = phoneNo;
+    }
+
+    public void setDOB(String dateOfBirth){
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public void setCustomerNIC(String customerNIC){
+        this.customerNIC = customerNIC;
+    }
+
     public void setEmail(String email){
         this.email = email;
     }
