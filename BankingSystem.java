@@ -127,12 +127,10 @@ public class BankingSystem {
     }
 
 
-    public void loginAsAdmin() throws InvalidUserNamePasswordException{
-        // Add code to take input from user for username and password
-        // Validate the username and password
-        // If valid, proceed to the banking system
-        // Else, show error message and exit
-        Scanner scanner = new Scanner(System.in);
+    private void LoginAsAdmin() throws InvalidUserNamePasswordException{
+        // TODO: Add code to handle admin login
+        // Scanner scanner = new Scanner(System.in);
+        System.out.println("\033c");
         System.out.println("Login as Admin");
         System.out.println("Please enter the admin username and password to login");
         System.out.print("Username: ");
@@ -145,41 +143,128 @@ public class BankingSystem {
             System.out.println("Login successful!");
             // Proceed to the banking system
             // Add code to navigate to the banking system menu
-            System.out.println("Welcome to the Banking System "+"\'"+username+"\'");
-            System.out.println("01. Account Details");
-            System.out.println("02. Cash Deposit");
-            System.out.println("04. Account Statements");
-            System.out.println("05. Create a new Account");
-            System.out.print("Please select an option :  ");
-            int option = scanner.nextInt();
-            scanner.nextLine();
-            switch (option) {
-                case 1:
-                    
-                    break;
-                case 2:
-                    
-                    break;
-                case 3:
+            while(true){
+                try {
+                    System.out.println("Hello "+"\'"+username+"\' \uD83D\uDE0E");
+                    System.out.println("01. Account Details");
+                    System.out.println("02. Cash Deposit");
+                    System.out.println("03. Account Statements");
+                    System.out.println("04. Close an account");
+                    System.out.println("05. Create a new Account");
+                    System.out.println("06. Change Customer Details");
+                    System.out.println("07. Logout");
+                    System.out.print("Please select an option :  ");
+                    int option = Integer.parseInt(scanner.nextLine()) ;
+                    System.out.println("\033c");
 
-                    break;
-                case 4:
+                    switch (option) {
+                        case 1:
+                            System.out.println("Account Details\n");
+                            System.out.print("Enter userID : ");
+                            String userID = scanner.nextLine() ;
+                            Customer person = customerDatabase.get(String.valueOf(userID));
+                            System.out.println();
+                            System.out.println("Customer Name : " + person.getCustomerName());
+                            System.out.println("Customer Address : " + person.getAddress());
+                            System.out.println("Customer phone no. : " + person.getPhoneNo());
+                            System.out.println();
+                            ArrayList<String> accs = person.getAccountsOfCustomer() ; 
+                            // TODO: using the acc count to show options to get the more details and activate or deactivate or close the accounts
+                            int accCounts = this.DisplayAccountDetails(accs) ; 
+
+                            break;
+
+                        case 2:
+                            System.out.println("Cash Deposit \n");
+                            System.out.print("Enter Account number : ");
+                            int accNo = Integer.parseInt(scanner.nextLine()) ;
+                            double amount = Double.parseDouble(scanner.nextLine()) ;
+                            DepositCash(accNo,amount) ;
+                            System.out.println("\033c");
+                            System.out.println("Cash deposited successfully to Account No: " + accNo);
+                            break;
+
+                        case 3:
+                            // function to show last 10 or less transaction details and option to send the statement through the email
+                            System.out.println("Account Statement \n");
+                            System.out.print("Enter Account number(1****) : ");
+                            int accountNo = Integer.parseInt(scanner.nextLine()) ;
+                            Show10Transactions(accountNo);
+                            break;
+
+                        case 4:
+                            System.out.println("Close an Account \n");
+                            System.out.print("Enter Account number : ");
+                            int acc = Integer.parseInt(scanner.nextLine()) ;
+                            CloseAccount(acc);
+                            System.out.println("\033c");
+                            break;
+
+                        case 5:
+                            System.out.println("Create a new Account \n");
+                            System.out.println("Is this a new customer ?");
+                            System.out.print("01) YES   or   02) NO  :");
+                            int ans = Integer.parseInt(scanner.nextLine());
+                            boolean isNewUsr = (ans == 1)? true: false;
+                            this.CreateAccount(isNewUsr, null);
+                            System.out.println("\033c");
+                            break;
+
+                        case 6:
+                            System.out.println("Change Customer Details \n");
+                            System.out.print("Enter Customer ID : ");
+                            int customerID = Integer.parseInt(scanner.nextLine());
+                            if (customerDatabase.containsKey(String.valueOf(customerID))) {
+                                Customer cust = customerDatabase.get(String.valueOf(customerID));
+                                this.changeCustomerDetails(cust);
+                                break;
+
+                            } else {
+                                System.out.println("\033c");
+                                System.out.println("Customer ID not found.");
+                                break;
+                            }
+                                
+                        case 7:
+                            try {
+                                // scanner.close();
+                                System.out.println("Logging out...");
+                                Thread.sleep(1500); // Simulate a delay for logout
+                                return;
+                            } catch (InterruptedException e) {
+                                System.out.println("Logout interrupted.");
+                            }
+                            break;
                     
-                    break;
-                case 5:
-                    
-                    break;
-            
-                default:
-                    System.out.println("Invalid option. Please try again.");
+                        default:
+                            System.out.println("\033c");
+                            System.out.println("Invalid option. Please try again.");
+                            Thread.sleep(300);
+                    }
+
+                } catch (Exception e) {
+                    // TODO: handle exception
+                    System.out.println("\033c");
+                    System.out.println("An error occurred: " + e.getMessage());
+                    e.printStackTrace();
+                    System.out.println("Please try again.");
+                    try {
+                        Thread.sleep(1500); // Simulate a delay for error message
+                    } catch (InterruptedException ie) {
+                        System.out.println("Error message interrupted.");
+                    }
+                }
             }
 
 
         } else if(!SystemUserName.equals(username)){
+            // scanner.close();
             throw new InvalidUserNamePasswordException("Invalid username. Returning...");
         } else {
+            // scanner.close();
             throw new InvalidUserNamePasswordException("Invalid password. Returning...");
         }
+        // scanner.close();
     }
 
     public void loginAsCustomer() throws InvalidUserNamePasswordException{
