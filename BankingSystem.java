@@ -5,6 +5,23 @@ import java.util.HashMap;
 import java.util.Random;
 import java.util.Scanner;
 
+// import com.itextpdf.kernel.pdf.PdfDocument;
+// import com.itextpdf.kernel.pdf.PdfWriter;
+// import com.itextpdf.layout.Document;
+// import com.itextpdf.layout.element.Paragraph;
+// import com.itextpdf.layout.element.Table;
+// import com.itextpdf.layout.element.Cell;
+// import com.itextpdf.layout.properties.UnitValue;
+
+// import javax.mail.* ;
+// import javax.mail.internet.*;
+// import java.util.Properties;
+// import java.io.File;
+// import java.io.IOException;
+// import javax.activation.DataHandler;
+// import javax.activation.DataSource;
+// import javax.activation.FileDataSource;
+
 import exceptions.*;
 
 public class BankingSystem {
@@ -84,9 +101,27 @@ public class BankingSystem {
         Random rand = new Random();
         long transactionID;
 
-    private void listAllBranchNames(){
+        do {
+            transactionID = 1000000000000000L + (long)(rand.nextDouble() * 9000000000000000L); // ensures 16-digit number
+        } while (transactionDatabase.containsKey(String.valueOf(transactionID))); // retry if ID already exists
+
+        return transactionID;
+    }
+
+    
+    private void ListAllBranchNames(){
+        // TODO: need minor changes to display the branch names in a better way like orderly
+        int count = 0;
         for (String branch : branchDatabase.keySet()) {
-            System.out.print("|  " + branch + "  ");
+            System.out.print("|  " + branch + " - " + branchDatabase.get(branch).getBranchName() + "  ");
+            if(branchDatabase.get(branch).getBranchName().length() < 20) {
+                int spacesToAdd = 20 - branchDatabase.get(branch).getBranchName().length();
+                System.out.println(" ".repeat(spacesToAdd));
+            }
+            if(count % 4 == 3) {
+                System.out.print("|");
+                System.out.println();
+            }
         }
         System.out.print("|");
     }
