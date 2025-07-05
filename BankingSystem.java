@@ -267,10 +267,50 @@ public class BankingSystem {
         // scanner.close();
     }
 
-    public void loginAsCustomer() throws InvalidUserNamePasswordException{
-        // Add code to handle customer login
-        // TODO: catch the error of wrong input type
-        Scanner scanner = new Scanner(System.in);
+    private void changeCustomerDetails(Customer cust) {
+        System.out.println("Change Customer Details");
+        System.out.println("Current Customer Name: " + cust.getCustomerName());
+        System.out.print("Enter new Customer Name (or press Enter to keep current): ");
+        String newName = scanner.nextLine();
+        if (!newName.isEmpty()) {
+            cust.setCustomerName(newName);
+        }
+
+        System.out.println("Current Customer NIC: " + cust.getCustomerNIC());
+        System.out.print("Enter new Customer NIC (or press Enter to keep current): ");
+        String newNIC = scanner.nextLine();
+        if (!newNIC.isEmpty()) {
+            cust.setCustomerNIC(newNIC);
+        }
+
+        System.out.println("Current Address: " + cust.getAddress());
+        System.out.print("Enter new Address (or press Enter to keep current): ");
+        String newAddress = scanner.nextLine();
+        if (!newAddress.isEmpty()) {
+            cust.setAddress(newAddress);
+        }
+
+        System.out.println("Current Phone No.: " + cust.getPhoneNo());
+        System.out.print("Enter new Phone No. (or press Enter to keep current): ");
+        String newPhoneNo = scanner.nextLine();
+        if (!newPhoneNo.isEmpty()) {
+            cust.setPhoneNo(newPhoneNo);
+        }
+
+        System.out.println("Current Date of Birth: " + cust.getDOB());
+        System.out.print("Enter new Date of Birth (or press Enter to keep current): ");
+        String newDOB = scanner.nextLine();
+        if (!newDOB.isEmpty()) {
+            cust.setDOB(newDOB);
+        }
+        System.out.println("\033c");
+        System.out.println("User ID  \'" + cust.getCustomerID() + "\'  Details updated successfully!");
+    }
+
+    private void LoginAsCustomer() throws InvalidUserNamePasswordException{
+        // TODO: Add code to handle customer login
+        // Scanner scanner = new Scanner(System.in);
+        System.out.println("\033c");
         System.out.println("Login as Customer");
         System.out.println("Please enter your username and password to login");
         System.out.print("Customer ID: ");
