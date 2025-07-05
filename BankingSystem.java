@@ -46,12 +46,12 @@ public class BankingSystem {
             // System.out.println("\033[F\033[K");
         }
     }
-    private boolean branchNameIDMatch(String branchName) throws MismatchBranchNameIDException {
+    private boolean branchNameIDMatch(String branchID) throws MismatchBranchNameIDException {
         // Check if the branch name and ID match
-        if (branchDatabase.containsKey(branchName)) {
+        if (branchDatabase.containsKey(branchID)) {
             return true;
         } else {
-            throw new MismatchBranchNameIDException("Invalid Branch Name. Please try again.");
+            throw new MismatchBranchNameIDException("Invalid Branch ID. Please try again.");
         }
     }
     private void checkPINValidity(int PIN) throws InvalidPINException {
