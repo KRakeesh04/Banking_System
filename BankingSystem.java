@@ -456,7 +456,59 @@ public class BankingSystem {
         }
     }
 
-    public void createAccount(boolean isNewUsr) throws MismatchBranchNameIDException{
+    private void TransferFunds(int fromAcc, int toAcc, double transferAmount, int PIN_4digit, String discription) {
+        // TODO Auto-generated method stub
+        Account fromAccount = accDatabase.get(String.valueOf(fromAcc));
+        Account toAccount = accDatabase.get(String.valueOf(toAcc));
+        if (fromAccount == null || toAccount == null) {
+            System.out.println("One of the accounts does not exist.");
+            return;
+        }
+        try {         
+            fromAccount.transferMoney(toAccount, transferAmount, PIN_4digit);
+            LocalDateTime dateTime = LocalDateTime.now();
+            DateTimeFormatter formater = DateTimeFormatter.ofPattern("dd-MM-yyyy  HH:mm:ss");
+            String date = dateTime.format(formater);
+            Long transaID = RandomLongGeneratorForTransactionID() ;
+            // Log the transaction for reciver
+            Transaction reciveTransaction = new Transaction(transaID, "Deposit", date, transferAmount, "FUND Receive:" + discription, toAcc);
+            String transactionKey = String.valueOf(toAcc);
+            if (!transactionDatabase.containsKey(transactionKey)) {
+                transactionDatabase.put(transactionKey, new ArrayList<>());
+            }
+            ArrayList<Transaction> temp = transactionDatabase.get(transactionKey);
+            temp.add(reciveTransaction);
+            transactionDatabase.put(transactionKey, temp);
+            // Log the transaction for sender
+            Transaction sendTransaction = new Transaction(transaID, "Withdraw", date, transferAmount, "FUND TRF:" + discription, fromAcc);
+            String senderTransactionKey = String.valueOf(fromAcc);
+            if (!transactionDatabase.containsKey(senderTransactionKey)) {
+                transactionDatabase.put(senderTransactionKey, new ArrayList<>());
+            }
+            transactionDatabase.get(senderTransactionKey).add(sendTransaction);
+            System.out.println("\033c");
+            System.out.println("Transaction Details:");
+            System.out.println("Transaction ID: " + transaID);
+            System.out.println("Transfer successful from Account No: " + fromAcc + " to Account No: " + toAcc);
+            System.out.println();
+
+        } catch (InvalidAmountException e) {
+            System.out.println("\033c");
+            System.out.println("Transfer failed: " + e.getMessage());
+            return;
+        } catch (InvalidPINException e) {
+            System.out.println("\033c");
+            System.out.println("Transfer failed: " + e.getMessage());
+            return;
+        } catch (InactiveAccStatusException e) {
+            System.out.println("\033c");
+            System.out.println("Transfer failed: " + e.getMessage());
+            return;
+        }
+    }
+
+    // method to create a new account
+    private void CreateAccount(boolean isNewUsr, Customer person) {
         // Add code to handle account creation
         Scanner scanner = new Scanner(System.in);
         System.out.println("Create an Account");
