@@ -1,3 +1,6 @@
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.Scanner;
@@ -5,11 +8,36 @@ import java.util.Scanner;
 import exceptions.*;
 
 public class BankingSystem {
+    private static final Scanner scanner = new Scanner(System.in);
     private static String SystemUserName = "Admin001";
     private static String SystemPassword = "zxcvbnm";
-    private static HashMap<String,Account> accDatabase;
-    private static HashMap<String,Customer> customerDatabase;
-    private static HashMap<String,Branch> branchDatabase;
+    private static String custoFilePath = "./database/users.csv";
+    private static String branchFilePath = "./database/branches.csv";
+    private static String accFilePath = "./database/accounts.csv";
+    private static String transFilePath = "./database/transactionsOfCustomers.csv";
+    private static HashMap<String,Account> accDatabase = new HashMap<>();
+    private static HashMap<String,Customer> customerDatabase = new HashMap<>();
+    private static HashMap<String,Branch> branchDatabase = new HashMap<>();
+    private static HashMap<String,ArrayList<Transaction>> transactionDatabase = new HashMap<>();
+    private static BankDatabase bankDatabase;
+
+    public BankingSystem() {
+        // TODO: need to mark the last updated date for the interest amount and send the amount to the customer account at the end of the month
+        // This constructor can be used to initialize any necessary components or configurations for the banking system.
+        // Initialize the databases
+        bankDatabase = new BankDatabase();
+        bankDatabase.DBInitialize(customerDatabase, custoFilePath, branchDatabase, branchFilePath, accDatabase, accFilePath, transactionDatabase, transFilePath);
+        System.out.println("Successfully initialized the banking system with the database.");
+        
+        for( String customerID : customerDatabase.keySet()) {
+            Customer customer = customerDatabase.get(customerID);
+            System.out.println("Customer ID: " + customerID + ", Name: " + customer.getCustomerName());
+            System.out.println("Accounts of Customer: " + customer.getAccountsOfCustomer());
+            System.out.println("Customer Password: " + customer.getPassword());
+            System.out.println();
+        }
+
+    }
 
     private void removeLinesInTerminal(int lineCount) {
         for (int i = 0; i < lineCount; i++) {
