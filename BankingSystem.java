@@ -865,8 +865,29 @@ public class BankingSystem {
             System.out.println("\033c");
             System.out.println("Invalid choice for send email. Returning to the Dashboard...");
         }
-        scanner.close();
 
+    }
+
+
+
+
+
+    // method to send an email of transaction history
+    private void SendEmailTransactionHistory(int AccNo, ArrayList<TransactionData> transactionDataList) {
+        // This method will send an email of the transaction history
+        CreatePDFTransactionHistory(AccNo);
+        System.out.println("Sending email of transaction history for account number: " + AccNo);
+
+        // TODO: need to implement the logic to send the email with the transaction history
+        System.out.println("Transaction history for account number " + AccNo + " has been sent to the registered email address.");
+    }
+
+    // method to create and download a pdf of transaction history
+    private void CreatePDFTransactionHistory(int AccNo) {
+        System.out.println("Creating PDF of transaction history for account number: " + AccNo);
+
+        // TODO: need to implement the logic to create a PDF file of the transaction history
+        System.out.println("PDF of transaction history for account number " + AccNo + " has been created and downloaded.");
     }
 
 
