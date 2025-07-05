@@ -678,7 +678,6 @@ public class BankingSystem {
                     System.out.println(e.getMessage());
                     continue;
                 }
-                
             }
 
             // getting initial amount for the account
@@ -694,6 +693,177 @@ public class BankingSystem {
             System.out.println("Account created successfully!");
             System.out.println("Account Number: " + acc_No);
             System.out.println("Customer ID: " + customerID);
+            System.out.println();
+        }
+
+        // scanner.close();
+
+    }
+
+    // method to display account details
+    private int DisplayAccountDetails(ArrayList<String> accs) {        
+        System.out.println("Accounts details :");
+        int num = 0 ;
+
+        ArrayList<String> inactiveAcc = new ArrayList<>() ;
+        // System.out.println(String.format("   %-13s,   %-15s, %s", "Account no.", "Available balance", "Branch name"));
+        System.out.printf("%-4s %-20s %-25s %-20s%n", "No.", "Account No. (Type)", "Balance (Status)", "Branch Name");
+        System.out.println("--------------------------------------------------------------------");
+        for (String account_No : accs) {
+            try { 
+                Account account = accDatabase.get(account_No);
+                if (account == null) {
+                    System.out.println("Account with number " + account_No + " does not exist.");
+                    continue;
+                }
+                String accInfo = account_No + "(" + account.getAccType().toString() + ")";
+                String balanceStatus = String.format("%.2f (%s)", account.getBalance(), account.getAccStatus());
+                String branchName = account.getBranchName();
+                System.out.printf("%-4d %-20s %-25s %-20s%n", ++num, accInfo, balanceStatus, branchName);
+            // System.out.println(String.format("%d. %s(%s), %15.2f (%s), %s", ++num, account_No, account.getAccType(), account.getBalance(), account.getAccStatus(), account.getBranchName()));
+            // System.out.println(String.valueOf(++num) + ". " + account_No + 5 + " , " + String.valueOf(account.getBalance()) + "(" + String.valueOf(account.getAccStatus()) + ") , " + account.getBranchName());
+            } catch(InactiveAccStatusException excep) {
+                // If the account is inactive, add it to the inactive accounts list
+                inactiveAcc.add(account_No);
+                continue ;
+            }
+        }
+
+        if (!inactiveAcc.isEmpty()) {
+            System.out.println();
+            System.out.println("The following accounts are inactive: " + inactiveAcc);
+            System.out.println("Please contact the bank to activate these accounts.");
+            System.out.println();
+        }
+
+        return num ;
+    }
+
+    // method to deposit cash
+    private void DepositCash(int AccNo, double amount) {
+        Account acc = accDatabase.get(String.valueOf(AccNo)) ;
+        acc.depositMoney(amount,true);
+    }
+
+    // method to withdraw cash
+    private void WithdrawCash(int AccNo, double amount, int PIN_no) {
+        try {
+            Account acc = accDatabase.get(String.valueOf(AccNo)) ;
+            if(PIN_no == acc.getPIN()) {
+                acc.withdrawMoney(amount); 
+            } else {
+                throw new InvalidPINException("Your PIN is incorrect. Please try again.") ;
+            }
+        } catch (InactiveAccStatusException e) {
+            e.getMessage() ;
+        } catch (InvalidAmountException e) {
+            e.getMessage() ;
+        } catch (InvalidPINException e) {
+            /////////////////////////
+        }
+    }
+
+    // method to show the bank statements
+    private void Show10Transactions(int AccNo) {
+        // Show the last 10 transactions of the account
+        ArrayList<Transaction> transactions = transactionDatabase.get(String.valueOf(AccNo));
+        if (transactions == null || transactions.isEmpty()) {
+            System.out.println("No transactions found for this account.");
+            return;
+        }
+        Account acc = accDatabase.get(String.valueOf(AccNo));
+        Customer cust = customerDatabase.get(String.valueOf(acc.getCustomerID()));
+        if (cust == null) {
+            System.out.println("\033c");
+            System.out.println("Customer details not found for this account.");
+            return;
+        }
+        System.out.println("\033c"); // Clear the terminal screen
+        System.out.println("Account Statement for Account Number: " + AccNo);
+
+        System.out.println(" ------------------------------------------------------------------------------------------------ ");
+        System.out.println("|                                           Account Details                                      |");
+        System.out.println(" ------------------------------------------------------------------------------------------------ ");
+        System.out.println(String.format("| %-22s |  %-22s | %-22s |  %-17s |", "Account Holder Name", acc.getCustomerName(), "Account Holder NIC", cust.getCustomerNIC()) );
+        System.out.println(" ------------------------------------------------------------------------------------------------ ");
+        System.out.println(String.format("| %-15s |  %-10s | %-14s |  %-10s | %-17s |  %-10s |", "Account Number", AccNo, "Account Type", acc.getAccType(), "Account Status", acc.getAccStatus()) );
+        System.out.println(" ------------------------------------------------------------------------------------------------ ");
+        System.out.println(String.format("| %-20s |  %-23s | %-22s |  %-18s |", "Branch Name", acc.getBranchName(), "Branch ID", acc.getBranchID()) );
+        System.out.println(" ------------------------------------------------------------------------------------------------ ");
+        System.out.println("\n");
+        System.out.println("Last Transactions:"); // 23 characters, 26 characters, 40 characters, 17 characters, 17 characters, 17 characters"""
+        System.out.println(" -------------------------------------------------------------------------------------------------------------------------------------------------");
+        System.out.println("|    Transaction ID     |     Transaction Date     |              Description               |      Debit      |     Credit      |      Balance    |");
+        System.out.println(" -------------------------------------------------------------------------------------------------------------------------------------------------");
+        // Display the last 10 transactions
+
+        ArrayList<String> last10Data = new ArrayList<>();
+        ArrayList<TransactionData> transactionDataList = new ArrayList<>();
+        double tempBalance ;
+        try {
+            tempBalance = accDatabase.get(String.valueOf(AccNo)).getBalance() ;
+        } catch (InactiveAccStatusException e) {
+            System.out.println(e.getMessage());
+            return;
+        }
+        int count = 1;
+        for (int i = transactions.size() - 1; i >= 0; i--) {
+            Transaction transaction = transactions.get(i);
+            
+            if (count <= 10) {
+                // Stop after collecting 10 transactions
+                String Data = String.format("|  %-20d |   %-20s   |  %-36s  |  %-13s  |  %-13s  |  %-13.2f  |\n",
+                transaction.getTransactionID(),
+                transaction.getTransactionDate(),
+                transaction.getTransactionDescription(),
+                transaction.getTransactionType().equals("Withdraw") ? String.format("%.2f", transaction.getTransactionAmount()) : " ",
+                transaction.getTransactionType().equals("Deposit") ? String.format("%.2f", transaction.getTransactionAmount()) : " ",
+                tempBalance);
+    
+                last10Data.add(Data);
+                count++;
+            }
+
+            transactionDataList.add(new TransactionData(
+                transaction.getTransactionID(),
+                transaction.getTransactionDate(),
+                transaction.getTransactionDescription(),
+                transaction.getTransactionType(),
+                transaction.getTransactionAmount(),
+                tempBalance
+            ));
+
+            // Update the balance based on the transaction type
+            if(transaction.getTransactionType().equals("Withdraw")) {
+                tempBalance += transaction.getTransactionAmount();
+            } else if(transaction.getTransactionType().equals("Deposit")) {
+                tempBalance -= transaction.getTransactionAmount();
+            }
+
+        }
+        
+
+        for(String data : last10Data) {
+            System.out.print(data);
+            System.out.println(" -------------------------------------------------------------------------------------------------------------------------------------------------");
+        }
+
+        System.out.println("\n\n");
+        System.out.println("Transactions count: " + last10Data.size() + " of " + transactions.size());
+        System.out.println("Do you want to send this statement to the email ? (Y/N)");
+        // Scanner scanner = new Scanner(System.in);
+        String choice = scanner.nextLine();
+        System.out.println("\033c"); // Clear the terminal screen
+        if (choice.equalsIgnoreCase("Y")) {
+            // Call the method to send email
+            SendEmailTransactionHistory(AccNo, transactionDataList);
+        } else if (choice.equalsIgnoreCase("N")) {
+            System.out.println("\033c");
+            System.out.println("Email not sent.");
+            System.out.println("Returning...");
+        } else {
+            System.out.println("\033c");
+            System.out.println("Invalid choice for send email. Returning to the Dashboard...");
         }
         scanner.close();
 
